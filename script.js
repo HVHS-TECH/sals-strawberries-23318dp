@@ -16,5 +16,33 @@ function fb_popupLogin() {
 
 
   function fb_write(){
-    console.log ("shibby");
-  }
+    const name =
+    document.getElementById("name").value;
+    const favoriteFruit =
+    document.getElementById("favoriteFruit").value;
+    const fruitQuantity =
+    document.getElementById("fruitQuantity").value;
+  
+    let user = firebase.auth().currentUser
+
+    console.log('Users name is ' + name +
+      '. Their favourite fruit is ' + favoriteFruit +
+  '. They want ' + fruitQuantity + ' servings per week.')
+  
+      
+}
+
+
+
+
+
+
+firebase.database().ref("fruitForms/" + name).set({
+
+  name: name ,
+  favoriteFruit: favoriteFruit,
+  fruitQuantity: fruitQuantity,
+
+
+});
+  

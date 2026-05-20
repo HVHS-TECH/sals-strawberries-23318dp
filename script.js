@@ -23,26 +23,89 @@ function fb_popupLogin() {
     const fruitQuantity =
     document.getElementById("fruitQuantity").value;
   
-    let user = firebase.auth().currentUser
+    //let user = firebase.auth().currentUser
 
     console.log('Users name is ' + name +
       '. Their favourite fruit is ' + favoriteFruit +
   '. They want ' + fruitQuantity + ' servings per week.')
   
+  firebase.database().ref("fruitForms/" + name).set({
+
+    name: name ,
+    favoriteFruit: favoriteFruit,
+    fruitQuantity: fruitQuantity,
+  
+  
+  });
       
 }
+function sendEmail() {
+
+  document.getElementById("reviewSection").style.display = "none";
+
+  let user = firebase.auth().currentUser;
+
+  if (!user) {
+    alert("Please log in first.");
+    return;
+  }
+}
+let userID = user.uid;
+  let email = user.email;
+
+  // Read data from Firebase
+  firebase.database()
+    .ref("fruitForms/" + userID)
+    .once("value")
+    .then((snapshot) => {
+
+      const data = snapshot.val();
+
+      if (!data) {
+        alert("No form data found in database.");
+        return;
+      }
+
+      const name = data.name;
+      const favoriteFruit = data.favoriteFruit;
+      const fruitQuantity = data.fruitQuantity;
+
+      document.getElementById('emailMessage').innerHTML = `
+
+        <div>
+          <p>To: ${email}</p>
+          <p>From: Sal's Strawberry Saloon</p>
+
+          <p>Hello, ${name}</p>
+
+          <p>
+            This is Sal's Strawberry Saloon,
+            reaching out about your car's extended insurance policy.
+          </p>
+
+          <p>
+            Also, we are offering a deal on your favorite fruit:
+            ${favoriteFruit}
+          </p>
+
+          <p>
+            You can get ${fruitQuantity} servings per week
+            for 27.3% more!
+          </p>
+
+          <p>
+            Best regards,<br>
+            Sal's Strawberry Saloon
+          </p>
+        </div>
+
+      `;
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 
 
 
 
-
-
-firebase.database().ref("fruitForms/" + name).set({
-
-  name: name ,
-  favoriteFruit: favoriteFruit,
-  fruitQuantity: fruitQuantity,
-
-
-});
-  

@@ -1,6 +1,6 @@
 
 console.log("Running Sal's Strawberries")
-
+let user = firebase.auth().currentUser
 function writeForm(){
     // Get the form data
     const favoriteFruit = document.getElementById("favoriteFruit").value;
@@ -15,33 +15,8 @@ function fb_popupLogin() {
   }
 
 
-  function fb_write(){
-    const name =
-    document.getElementById("name").value;
-    const favoriteFruit =
-    document.getElementById("favoriteFruit").value;
-    const fruitQuantity =
-    document.getElementById("fruitQuantity").value;
-  
-    //let user = firebase.auth().currentUser
 
-    console.log('Users name is ' + name +
-      '. Their favourite fruit is ' + favoriteFruit +
-  '. They want ' + fruitQuantity + ' servings per week.')
-  
-  firebase.database().ref("fruitForms/" + name).set({
-
-    name: name ,
-    favoriteFruit: favoriteFruit,
-    fruitQuantity: fruitQuantity,
-  
-  
-  });
-      
-}
-function sendEmail() {
-
-  document.getElementById("reviewSection").style.display = "none";
+function fb_write(){
 
   let user = firebase.auth().currentUser;
 
@@ -49,11 +24,41 @@ function sendEmail() {
     alert("Please log in first.");
     return;
   }
+
+  const userID = user.uid;
+
+  const name = document.getElementById("name").value;
+  const favoriteFruit = document.getElementById("favoriteFruit").value;
+  const fruitQuantity = document.getElementById("fruitQuantity").value;
+
+  firebase.database().ref("fruitForms/" + userID).set({
+
+    name: name,
+    favoriteFruit: favoriteFruit,
+    fruitQuantity: fruitQuantity
+
+  });
+
+  console.log('Users name is ' + name +
+    '. Their favourite fruit is ' + favoriteFruit +
+'. They want ' + fruitQuantity + ' servings per week.')
 }
-let userID = user.uid;
+
+function sendEmail() {
+
+
+  let user = firebase.auth().currentUser;
+
+  if (!user) {
+    alert("Please log in first.");
+    return;
+  }
+  
+  let userID = user.uid;
   let email = user.email;
 
   // Read data from Firebase
+  fruitForms/user.uid
   firebase.database()
     .ref("fruitForms/" + userID)
     .once("value")
@@ -67,7 +72,7 @@ let userID = user.uid;
       }
 
       const name = data.name;
-      const favoriteFruit = data.favoriteFruit;
+      const favoriteFruit= data.favoriteFruit;
       const fruitQuantity = data.fruitQuantity;
 
       document.getElementById('emailMessage').innerHTML = `
@@ -79,19 +84,16 @@ let userID = user.uid;
           <p>Hello, ${name}</p>
 
           <p>
-            This is Sal's Strawberry Saloon,
-            reaching out about your car's extended insurance policy.
+            This is Sal's Strawberry Saloon, buy fruit now.
           </p>
 
           <p>
-            Also, we are offering a deal on your favorite fruit:
-            ${favoriteFruit}
-          </p>
-
+            Your favourite fruit is ${favoriteFruit} 
+            </p>
           <p>
-            You can get ${fruitQuantity} servings per week
-            for 27.3% more!
+          Your fatass has eaten this fruit ${fruitQuantity} many times
           </p>
+          
 
           <p>
             Best regards,<br>
@@ -105,6 +107,7 @@ let userID = user.uid;
     .catch((error) => {
       console.log(error);
     });
+}
 
 
 

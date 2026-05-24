@@ -54,14 +54,15 @@ function sendEmail() {
     return;
   }
   
-  let userID = user.uid;
-  let email = user.email;
+  
+  
 
   // Read data from Firebase
-  fruitForms/user.uid
-  firebase.database()
-    .ref("fruitForms/" + userID)
-    .once("value")
+  const userID = user.uid;
+
+firebase.database()
+  .ref("fruitForms/" + userID)
+  .once("value")
     .then((snapshot) => {
 
       const data = snapshot.val();
@@ -78,7 +79,7 @@ function sendEmail() {
       document.getElementById('emailMessage').innerHTML = `
 
         <div>
-          <p>To: ${email}</p>
+          <p>To: ${name}</p>
           <p>From: Sal's Strawberry Saloon</p>
 
           <p>Hello, ${name}</p>
@@ -91,7 +92,10 @@ function sendEmail() {
             Your favourite fruit is ${favoriteFruit} 
             </p>
           <p>
-          Your fatass has eaten this fruit ${fruitQuantity} many times
+          Your have eaten this fruit ${fruitQuantity} times this week.
+          </p>
+          <p>
+          Would you be intreasted in purchasing more perhaps? If so contact us at 052 478 53I4
           </p>
           
 
